@@ -1,18 +1,23 @@
-import {Body, Controller, Get, Post} from "routing-controllers";
+import {BadRequestError, Body, Controller, Get, Post} from "routing-controllers";
+import {PaymentsService} from "../services/payments.service";
+import {Service} from "typedi";
+import {CreatePaymentSchema} from "../schemas/createPayment.schema";
 
-const payments = []
 
 @Controller()
+@Service()
 export class PaymentsController {
+    constructor(private paymentsService:PaymentsService){
+
+    }
 
     @Get('/payments')
     getPayments(){
-        return payments;
+        return this.paymentsService.getAll()
     }
 
     @Post('/payments')
-    createPayment(@Body() payment:any){
-        payments.push(payment)
+    createPayment(@Body({validate:true}) payment: CreatePaymentSchema){
+        return this.paymentsService.create(payment)
     }
 }
-

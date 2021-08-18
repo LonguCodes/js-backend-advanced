@@ -3,8 +3,6 @@ import {PaymentsRepository} from "../repositories/payments.repository";
 import {InjectRepository} from "typeorm-typedi-extensions";
 import {PaymentEntity} from "../entities/payment.entity";
 
-const payments = []
-
 @Service()
 export class PaymentsService {
 
@@ -20,5 +18,9 @@ export class PaymentsService {
 
     create(payment:any){
         return this.paymentsRepository.save(payment)
+    }
+
+    delete(id:number) {
+        return this.paymentsRepository.delete(id)
     }
 }

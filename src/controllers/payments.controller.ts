@@ -1,4 +1,4 @@
-import {BadRequestError, Body, Controller, Get, Post} from "routing-controllers";
+import {BadRequestError, Body, Controller, Get, Post, Delete, Param} from "routing-controllers";
 import {PaymentsService} from "../services/payments.service";
 import {Service} from "typedi";
 import {CreatePaymentSchema} from "../schemas/createPayment.schema";
@@ -19,5 +19,10 @@ export class PaymentsController {
     @Post('/payments')
     createPayment(@Body({validate:true}) payment: CreatePaymentSchema){
         return this.paymentsService.create(payment)
+    }
+
+    @Delete('/payments/:id')
+    deletePayment(@Param('id') id:number){
+        return this.paymentsService.delete(id)
     }
 }

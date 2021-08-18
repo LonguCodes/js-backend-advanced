@@ -30,7 +30,7 @@ async function main(){
         }
     })
 
-    app.listen(3000,()=>console.log('Application started on port 3000'))
+    app.listen(3001,()=>console.log('Application started on port 3001'))
 }
 
 main()

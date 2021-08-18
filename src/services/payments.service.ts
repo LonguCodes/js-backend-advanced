@@ -2,6 +2,7 @@ import {Service} from 'typedi'
 import {PaymentsRepository} from "../repositories/payments.repository";
 import {InjectRepository} from "typeorm-typedi-extensions";
 import {PaymentEntity} from "../entities/payment.entity";
+import {PaymentNotFoundError} from "../errors/payment-not-found.error";
 
 @Service()
 export class PaymentsService {
@@ -20,7 +21,9 @@ export class PaymentsService {
         return this.paymentsRepository.save(payment)
     }
 
-    delete(id:number) {
-        return this.paymentsRepository.delete(id)
+    async delete(id:number) {
+        if(await this.paymentsRepository.findOne(id))
+            return this.paymentsRepository.delete(id)
+        throw new PaymentNotFoundError()
     }
 }

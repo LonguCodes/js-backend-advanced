@@ -1,7 +1,8 @@
-import {BadRequestError, Body, Controller, Get, Post, Delete, Param} from "routing-controllers";
+import {BadRequestError, Body, Controller, Get, Post, Delete, Param, NotFoundError} from "routing-controllers";
 import {PaymentsService} from "../services/payments.service";
 import {Service} from "typedi";
 import {CreatePaymentSchema} from "../schemas/createPayment.schema";
+import {PaymentNotFoundError} from "../errors/payment-not-found.error";
 
 
 @Controller()
@@ -22,7 +23,14 @@ export class PaymentsController {
     }
 
     @Delete('/payments/:id')
-    deletePayment(@Param('id') id:number){
-        return this.paymentsService.delete(id)
+    async deletePayment(@Param('id') id:number){
+        try {
+            return await this.paymentsService.delete(id)
+        }
+        catch (e) {
+            if(e instanceof PaymentNotFoundError)
+                throw new NotFoundError()
+            throw e;
+        }
     }
 }
